@@ -47,27 +47,14 @@ public class ContractRecord extends BaseRecord {
 	}
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("ContractRecord [contractNumber=");
-		builder.append(contractNumber);
-		builder.append(", cusip=");
-		builder.append(cusip);
-		builder.append(", contractStatus=");
-		builder.append(contractStatus);
-		builder.append(", contractValuationRecords=");
-		builder.append(contractValuationRecords);
-		builder.append(", getSubmitterCode()=");
-		builder.append(getSubmitterCode());
-		builder.append(", getRecordType()=");
-		builder.append(getRecordType());
-		builder.append(", getSequenceNumber()=");
-		builder.append(getSequenceNumber());
-		builder.append(",\n\t\t\t contractValuationRecords="+contractValuationRecords); 
-		builder.append(",\\n\\t\\t\\t  contractUnderlyingAssets="+contractUnderlyingAssets);
-		builder.append("]");
-		return builder.toString();
+		return "ContractRecord [getSubmitterCode()=" + getSubmitterCode() + ", getRecordType()=" + getRecordType()
+				+ ", getSequenceNumber()=" + getSequenceNumber() + ", getGenUUID()=" + getGenUUID()
+				+ ", getParentUUID()=" + getParentUUID() + ", contractNumber=" + contractNumber + ", cusip=" + cusip
+				+ ", contractStatus=" + contractStatus + 
+				"\n\t\t\t, contractValuationRecords=" + contractValuationRecords
+				+ ",\n\t\t\t contractUnderlyingAssets=" + contractUnderlyingAssets + "]";
 	}
-
+	
 	
 	
 }

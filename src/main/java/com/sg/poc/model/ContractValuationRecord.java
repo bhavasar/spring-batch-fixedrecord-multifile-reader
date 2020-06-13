@@ -43,7 +43,7 @@ public class ContractValuationRecord extends BaseRecord {
 	}
 	@Override
 	public String toString() {
-		return "ContractValuationRecord [contractNumber=" + contractNumber + ", contractValueAmount1="
+		return "\n\t\t\t\t ContractValuationRecord [contractNumber=" + contractNumber + ", contractValueAmount1="
 				+ contractValueAmount1 + ", contractValueQualifier1=" + contractValueQualifier1
 				+ ", contractValueAmount2=" + contractValueAmount2 + ", contractValueQualifier2="
 				+ contractValueQualifier2 + "]";

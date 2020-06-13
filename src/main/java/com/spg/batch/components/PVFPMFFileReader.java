@@ -44,9 +44,6 @@ public class PVFPMFFileReader implements ResourceAwareItemReaderItemStream<Contr
 			curItem = delegate.read();
 		}
 
-		
-
-		
 		if(curItem != null && curItem instanceof SubmittingHeader) {
 			SubmittingHeader submittingHeader = (SubmittingHeader) curItem;
 			curItem = null;

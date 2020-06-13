@@ -73,12 +73,12 @@ public class ContraRecord  extends BaseRecord  {
 
 	@Override
 	public String toString() {
-		return "ContraRecord{" +
-				"accountNumber='" + accountNumber + '\'' +
-				", transactionDate=" + transactionDate +
-				", amount=" + amount +
-				", \n\t\t contractRecords=" + (contractRecords!=null ? contractRecords.size() + "contracts" : " no contacts record") +
-				contractRecords +
-				'}';
+		return "ContraRecord [getSubmitterCode()=" + getSubmitterCode() + ", getRecordType()=" + getRecordType()
+				+ ", getSequenceNumber()=" + getSequenceNumber() + ", getGenUUID()=" + getGenUUID()
+				+ ", getParentUUID()=" + getParentUUID() + ", accountNumber=" + accountNumber + ", transactionDate="
+				+ transactionDate + ", amount=" + amount + ",\n\t contractRecords=" + contractRecords + ", formatter="
+				+ formatter + "]";
 	}
+
+	
 }
