@@ -80,11 +80,11 @@ public class PVFPMFFileReader implements ResourceAwareItemReaderItemStream<Contr
 							contractUnderlyingAssets.getContractBandGuaranteed().add(contractBandGuaranteed);
 							curItem = peekAlways();
 						}
-						//curItem = null;
+						
 					}
-					//curItem = null;
+					
 				}
-				//curItem = null;
+				
 			}
 
 		return contraRecord;
