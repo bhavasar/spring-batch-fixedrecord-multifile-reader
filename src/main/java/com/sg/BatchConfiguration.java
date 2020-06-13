@@ -23,9 +23,7 @@ import org.springframework.batch.item.database.BeanPropertyItemSqlParameterSourc
 import org.springframework.batch.item.database.JdbcBatchItemWriter;
 import org.springframework.batch.item.database.builder.JdbcBatchItemWriterBuilder;
 import org.springframework.batch.item.file.FlatFileItemReader;
-import org.springframework.batch.item.file.MultiResourceItemReader;
 import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder;
-import org.springframework.batch.item.file.builder.MultiResourceItemReaderBuilder;
 import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
 import org.springframework.batch.item.file.mapping.FieldSetMapper;
 import org.springframework.batch.item.file.mapping.PatternMatchingCompositeLineMapper;
@@ -45,6 +43,7 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
+import com.sg.poc.model.ContraRecord;
 import com.sg.poc.model.ContractBandGuaranteed;
 import com.sg.poc.model.ContractRecord;
 import com.sg.poc.model.ContractUnderlyingAssets;
@@ -72,6 +71,9 @@ public class BatchConfiguration {
 	
 	@Autowired
 	private PVFPMFFileReader povItemReader;
+	
+	@Autowired
+	private PovItemProcessor povItemProcessor;
 
 	@Bean("partitioner")
 	@StepScope
@@ -96,6 +98,12 @@ public class BatchConfiguration {
 	public PersonItemProcessor processor() {
 		return new PersonItemProcessor();
 	}
+	
+	@Bean
+	@Qualifier("povItemReader")
+	public PovItemProcessor povProcessor() {
+		return new PovItemProcessor();
+	}
 
 	@Bean
 	public JdbcBatchItemWriter<Person> writer(DataSource dataSource) {
@@ -107,7 +115,7 @@ public class BatchConfiguration {
 	}
 
 	@Bean
-	public ItemWriter itemWriter() {
+	public ItemWriter<ContraRecord> itemWriter() {
 		return (items) -> {
 			System.out.println("Results are here: in nested object");
 			items.forEach(System.out::println);
@@ -128,8 +136,8 @@ public class BatchConfiguration {
 	@Bean
 	public Step step1() {
 		return stepBuilderFactory.get("step1")
-				.<SubmittingHeader, SubmittingHeader>chunk(1)
-			//	.processor(processor())
+				.<ContraRecord, ContraRecord>chunk(1)
+				.processor(povItemProcessor)
 				.writer(itemWriter())
 				.reader(povItemReader)
 				.build();

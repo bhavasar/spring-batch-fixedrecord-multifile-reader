@@ -27,7 +27,7 @@ import com.sg.poc.model.*;
 /**
  * @author Saravana Ganesan
  */
-public class PVFPMFFileReader implements ResourceAwareItemReaderItemStream<SubmittingHeader> {
+public class PVFPMFFileReader implements ResourceAwareItemReaderItemStream<ContraRecord> {
 
 	private Object curItem = null;
 
@@ -37,62 +37,67 @@ public class PVFPMFFileReader implements ResourceAwareItemReaderItemStream<Submi
 		this.delegate = delegate;
 	}
 
-	public SubmittingHeader read() throws Exception {
+	public ContraRecord read() throws Exception {
+		ContraRecord contraRecord = null;
 		System.out.println("Reader Reading ...." );
 		if(curItem == null) {
 			curItem = delegate.read();
 		}
 
-		SubmittingHeader item = (SubmittingHeader) curItem;
-		curItem = null;
+		
 
-		if(item != null) {
-			item.setTransactions(new ArrayList<ContraRecord>());
-
-			while(peek() instanceof ContraRecord) {
-				item.getTransactions().add((ContraRecord) curItem);
-				
-				ContraRecord contraRecord = (ContraRecord) curItem;
-				
+		
+		if(curItem != null && curItem instanceof SubmittingHeader) {
+			SubmittingHeader submittingHeader = (SubmittingHeader) curItem;
+			curItem = null;
+			curItem = delegate.read();
+		}
+		
+			if(curItem != null && curItem instanceof ContraRecord) {
+				contraRecord = (ContraRecord) curItem;
+								
 				contraRecord.setContractRecords(new ArrayList<ContractRecord>());				
-				curItem = null;
-				while(peek() instanceof ContractRecord) {
+				curItem = peekAlways();
+				while(curItem!=null && curItem instanceof ContractRecord) {
 					contraRecord.getContractRecords().add((ContractRecord) curItem);
 					ContractRecord contractRecord = (ContractRecord) curItem;
-					curItem = null;
 					contractRecord.setContractValuationRecords(new ArrayList<ContractValuationRecord>());
-					while(peek() instanceof ContractValuationRecord) {
+					curItem = peekAlways() ;
+					while(curItem!=null &&  curItem instanceof ContractValuationRecord) {
 						ContractValuationRecord contractValuationRecord = (ContractValuationRecord) curItem;
 						contractRecord.getContractValuationRecords().add(contractValuationRecord);
-						curItem = null;
+						curItem = peekAlways();
 					}
 					contractRecord.setContractUnderlyingAssets(new ArrayList<ContractUnderlyingAssets>());
-					while(peek() instanceof ContractUnderlyingAssets) {
+					while(curItem!=null &&  curItem instanceof ContractUnderlyingAssets) {
 						ContractUnderlyingAssets contractUnderlyingAssets = (ContractUnderlyingAssets) curItem;
 						contractRecord.getContractUnderlyingAssets().add(contractUnderlyingAssets);
 						
-						curItem = null;
+						curItem = peekAlways();
 						contractUnderlyingAssets.setContractBandGuaranteed(new ArrayList<ContractBandGuaranteed>());
-						while(peek() instanceof ContractBandGuaranteed) {
+						while(curItem!=null &&  curItem instanceof ContractBandGuaranteed) {
 							ContractBandGuaranteed contractBandGuaranteed = (ContractBandGuaranteed) curItem;
 							contractUnderlyingAssets.getContractBandGuaranteed().add(contractBandGuaranteed);
-							curItem = null;
+							curItem = peekAlways();
 						}
-						curItem = null;
+						//curItem = null;
 					}
-					curItem = null;
+					//curItem = null;
 				}
-				curItem = null;
+				//curItem = null;
 			}
-		}
 
-		return item;
+		return contraRecord;
 	}
 
 	private Object peek() throws Exception {
 		if (curItem == null) {
 			curItem = delegate.read();
 		}
+		return curItem;
+	}
+	private Object peekAlways() throws Exception {
+		curItem = delegate.read();
 		return curItem;
 	}
 
